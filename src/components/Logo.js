@@ -1,4 +1,4 @@
-import logo from './assets/images/logo.svg';
+import logo from '../assets/images/logo.svg';
 
 const Logo = () => {
   return (
@@ -6,4 +6,4 @@ const Logo = () => {
   )
 }
 
-export default Logo
+export default Logo;
