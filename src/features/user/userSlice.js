@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 
 import customFetch from '../../utils/axios';
 import { addUserToLocalStorage, getUserFromLocalStorage, removeUserFromLocalStorage } from '../../utils/lovalStrage';
+import { registerUserThunk, updateUserThunk } from './userThunk';
 
 const initialState = {
   isLoading: false,
@@ -13,27 +14,23 @@ const initialState = {
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async (user, thunkAPI) => {
-    try {
-      const resp = await customFetch.post('/auth/register', user);
-      return resp.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg)
-    }
+    return registerUserThunk('/auth/register', user, thunkAPI);
   }
 )
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (user, thunkAPI) => {
-    try {
-      const resp = await customFetch.post('/auth/login', user);
-      return resp.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg)
-    }
+    return registerUserThunk('/auth/login', user, thunkAPI);
   }
 )
 
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (user, thunkAPI) => {
+    return updateUserThunk('/auth/updateUser', user, thunkAPI);
+  }
+)
 
 const userSlice = createSlice({
   name: 'user',
@@ -76,6 +73,21 @@ const userSlice = createSlice({
       toast.success(`Welcome back ${user.name}`)
     },
     [loginUser.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.error(payload);
+    },
+    [updateUser.pending]: (state) => {
+      state.isLoading = true;
+
+    },
+    [updateUser.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      const { user } = payload;
+      state.user = user;
+      addUserToLocalStorage(user);
+      toast.success(`User updated!`)
+    },
+    [updateUser.rejected]: (state, { payload }) => {
       state.isLoading = false;
       toast.error(payload);
     }

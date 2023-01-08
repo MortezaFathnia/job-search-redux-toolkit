@@ -8,7 +8,7 @@ import { toggleSidebar, logoutUser } from '../features/user/userSlice';
 
 const Navbar = () => {
   const [showLogout, setShowLogout] = useState()
-  const user = useSelector((store) => store.user);
+  const {user} = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const toggle = () => {
     dispatch(toggleSidebar())
