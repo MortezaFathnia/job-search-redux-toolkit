@@ -17,7 +17,7 @@ const initialState = {
 const Register = () => {
   const [values, setValues] = useState(initialState);
   const { user, isLoading } = useSelector(store => store.user);
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   // redux toolkit and useNavigate later
 
@@ -43,7 +43,7 @@ const Register = () => {
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
   };
-  
+
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -80,7 +80,14 @@ const Register = () => {
           handleChange={handleChange}
         />
         <button type='submit' className='btn btn-block' disabled={isLoading}>
-          {isLoading? 'loading ...':'submit'}
+          {isLoading ? 'loading ...' : 'submit'}
+        </button>
+        <button type='button'
+          className='btn btn-block btn-hipster'
+          disabled={isLoading}
+          onClick={()=>dispatch(loginUser({email:'testUser@test.com',password:'secret'}))}
+        >
+          {isLoading ? 'loading ...' : 'demo app'}
         </button>
         <p>
           {values.isMember ? 'Not a member yet?' : 'Already a member?'}
@@ -88,6 +95,7 @@ const Register = () => {
           <button type='button' onClick={toggleMember} className='member-btn'>
             {values.isMember ? 'Register' : 'Login'}
           </button>
+
         </p>
       </form>
     </Wrapper>
